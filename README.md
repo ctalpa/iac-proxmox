@@ -108,32 +108,3 @@ Please see the issues defined under the Gitlab Repository.
 Copyright © 2024 Carmine Talpa & Federico Augello
 
 
-
-
-
-
-
-terraform workspace new "dev"
-terraform workspace list
-terraform init
-terraform plan -var-file="./proxmox-env.tfvars"
-
-
-
-nerdctl login artifactory.rancherinf.elt.elt 
-jfroguser
-
-
-sudo systemctl status etcd.service
-sudo systemctl start etcd.service
-sudo systemctl kill etcd.service
-sudo vim /etc/etcd.env 
- 
-nc -vz 192.168.100.22 2380
-nc -vz 192.168.100.22 2379
-nc -vz 192.168.100.22 2322
-sudo systemctl status etcd.service
-sudo systemctl start etcd.service
-sudo etcdctl del "" --from-key 
-sudo etcdctl del "" --from-key=true
-sudo su 
