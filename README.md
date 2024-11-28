@@ -1,93 +1,139 @@
 # Iac Proxmox
+The project is based on Infrastructure as Code (IaC) through Terraform, for more details see [Official Documentation](https://developer.hashicorp.com/terraform/docs).
+
+This project create and manage virtual machine, virtual local area network and bridge on Proxmox. The project is organised with two modules:
+ 
+* proxmox_vn : this module create bridge and vLAN in proxmox for more detail click [here](./module/proxmox_vn/README.md).
+* proxmox_vm: this module create virtual machine in proxmox for more detail click [here](./module/proxmox_vm/README.md)
+
+The figure below shows how the project is organized, the following files are very important:
+
+* environment.tfvars : in this file there are all definition variables in order to provisioning all resources on Proxmox Hypervisor. 
+* secret.tfvars : in this file there are the secretes in order to connect on Proxmox Hypervisor and ther is the user and password created in to vm provisioned
+
+![project](./iac-proxmox.png)
 
 
+### Workspace
 
-## Getting started
+> Examples with workspace for demonstration purposes.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
+```bash
+# NOMEWORKSPACE = workspace name
+terraform workspace new NOMEWORKSPACE
+# init terraform project (download public modules from terraform registry)
+terraform init
 ```
-cd existing_repo
-git remote add origin https://gitlab.rancherinf.elt.elt/eng/application/common/iac-proxmox.git
-git branch -M main
-git push -uf origin main
+
+After that edit or view a file under tfvars with variables we may need (number and characteristics machines in the cluster, initial packages, network interfaces, disks, etc.).
+
+To deploy a new infrastructure or just updates, run the following commands:
+
+```bash
+# Verify that you are in the right workspace
+terraform workspace list
+# To see if there are syntactic or form errors (e.g., variable used in a template but is nonexistent)
+terraform validate
+terraform fmt
+# To see if there are syntactic or form errors
+terraform validate tfvars
+terraform fmt tfvars
+# To see the changes that will be made in the cluster
+terraform plan -var-file="tfvars/VAR_FILE.tfvars"
+# To apply the changes that will be made in the cluster, it requires confirmation
+terraform apply -var-file="tfvars/VAR_FILE.tfvars"
 ```
 
-## Integrate with your tools
+To destroy the infrastructure execute:
 
-- [ ] [Set up project integrations](https://gitlab.rancherinf.elt.elt/eng/application/common/iac-proxmox/-/settings/integrations)
+```bash
+# Verify that you are in the right workspace
+terraform workspace list
+# To see if there are syntactic or form errors (e.g., variable used in a template but is nonexistent)
+terraform validate
+terraform fmt
+# To see if there are syntactic or form errors
+terraform validate tfvars
+terraform fmt tfvars
+# To apply the changes that will be made in the cluster, it requires confirmation
+terraform destroy tfvars/VAR_FILE.tfvars
+```
 
-## Collaborate with your team
+## Provisioning
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+Escape the terraform login on the enterprise artifactory (JFrog Artifactory) where the state of the Infrastructure is historicized
 
-## Test and Deploy
+```bash
+terraform login artifactory.rancherinf.elt.elt
+```
 
-Use the built-in continuous integration in GitLab.
+Launch the commands as follows:
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+```bash
+terraform init
+terraform validate
+terraform fmt
+terraform plan -var-file="tfvars/environment.tfvars"
+terraform apply -var-file="tfvars/environment.tfvars"
+```
+To distract the environment, run the command:
 
-***
+```bash
+terraform destroy -var-file="tfvars/environment.tfvars" 
+```
 
-# Editing this README
+## Requirements
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+| Name | Version |
+| --- | --- |
+| terraform | >= 1.9.8 |
 
-## Suggestions for a good README
+ 
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## Providers
 
-## Name
-Choose a self-explaining name for your project.
+| Name | Version |
+| --- | --- |
+| registry.terraform.io/bpg/proxmox | >= v0.64.0 |
+| registry.terraform.io/hashicorp/random | >= v3.6.3 |
+| registry.terraform.io/hashicorp/tls | >= v4.0.6 | 
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## TODO
+N.A.
+Please see the issues defined under the Gitlab Repository.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Copyrights
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Copyright © 2024 Carmine Talpa & Federico Augello
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+terraform workspace new "dev"
+terraform workspace list
+terraform init
+terraform plan -var-file="./proxmox-env.tfvars"
 
-## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+
+nerdctl login artifactory.rancherinf.elt.elt 
+jfroguser
+
+
+sudo systemctl status etcd.service
+sudo systemctl start etcd.service
+sudo systemctl kill etcd.service
+sudo vim /etc/etcd.env 
+ 
+nc -vz 192.168.100.22 2380
+nc -vz 192.168.100.22 2379
+nc -vz 192.168.100.22 2322
+sudo systemctl status etcd.service
+sudo systemctl start etcd.service
+sudo etcdctl del "" --from-key 
+sudo etcdctl del "" --from-key=true
+sudo su 
