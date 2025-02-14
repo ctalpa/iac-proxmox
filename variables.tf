@@ -49,16 +49,24 @@ variable "vm-network" {
   type = object({
     cidr        = string
     gw          = string
-    name        = string
-    interface   = string
     bridge      = string
-    vlan_id     = number
     dns_servers = list(string)
     dns_domain  = string
-    internal_gw = optional(string)
-    internal_bridge = optional(string)
-    # create_bridge = optional(bool)
   })
+}
+
+
+variable "vnetwork" {
+  description = "value"
+  type = object({
+    name      = string
+    interface = string
+    cidr      = string
+    gw        = string
+    bridge    = string
+    vlan_id   = number
+  })
+
 }
 
 variable "vm-account" {

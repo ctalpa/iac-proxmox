@@ -5,19 +5,6 @@ terraform {
       version = "~> 0.64.0"
     }
   }
-
-  backend "local" {
-    path = "iac-provisioning.tfstate"
-  }
-
-  # backend "remote" {
-  #   hostname = "artifactory.rancherinf.elt.elt"
-  #   organization = "terraform-be-snapshot"
-  #   workspaces {
-  #     prefix = "iac-tst-"
-  #   }
-
-  # }
 }
 
 provider "proxmox" {

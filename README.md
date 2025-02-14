@@ -10,6 +10,9 @@ The figure below shows how the project is organized, the following files are ver
 
 * environment.tfvars : in this file there are all definition variables in order to provisioning all resources on Proxmox Hypervisor. 
 * secret.tfvars : in this file there are the secretes in order to connect on Proxmox Hypervisor and ther is the user and password created in to vm provisioned
+* module: In this folder are the following forms:
+    * proxmox_vm: this module takes care of virtual machine provisioning.
+    * proxmox_vn: this module takes care of configuring vlan network 
 
 ![project](./iac-proxmox.png)
 
@@ -61,25 +64,25 @@ terraform destroy tfvars/VAR_FILE.tfvars
 
 ## Provisioning
 
+### Backend (remote state file)
 Escape the terraform login on the enterprise artifactory (JFrog Artifactory) where the state of the Infrastructure is historicized
 
 ```bash
-terraform login artifactory.rancherinf.elt.elt
+terraform login <JFROG-ARTIFACTORY-SERVER>
 ```
-
-Launch the commands as follows:
+In order to save the state file via the remote backend use the -backend-config flag.  Launch the commands as follows:
 
 ```bash
-terraform init
+terraform init -backend-config=tfbackend/config-remote.tfbackend
 terraform validate
 terraform fmt
-terraform plan -var-file="tfvars/environment.tfvars"
-terraform apply -var-file="tfvars/environment.tfvars"
+terraform plan -var-file="tfvars/environment.tfvars" -var-file="tfvars/secret.tfvars"
+terraform apply -var-file="tfvars/environment.tfvars" -var-file="tfvars/secret.tfvars"
 ```
 To distract the environment, run the command:
 
 ```bash
-terraform destroy -var-file="tfvars/environment.tfvars" 
+terraform destroy -var-file="tfvars/environment.tfvars" -var-file="tfvars/secret.tfvars"
 ```
 
 ## Requirements

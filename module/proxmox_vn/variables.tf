@@ -55,8 +55,3 @@ variable "vn_vlan_aware" {
 
 }
 
-# variable "create_bridge" {
-#   type        = bool
-#   description = "Create the bridge of the VLAN or not"
-#   default     = true
-# }

@@ -3,6 +3,6 @@ output "vm_user_key" {
 }
 
 output "vm_user_password" {
-  value = random_password.vm_user_password.result
+  value     = random_password.vm_user_password.result
   sensitive = true
 }

@@ -157,7 +157,7 @@ variable "vm_network_dns_domain" {
   default     = null
 }
 
-variable "vm_network_vlan_id" {
+variable "vm_network_internal_vlan_id" {
   type        = number
   description = "The VLAN identifier"
   default     = null
