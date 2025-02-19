@@ -1,0 +1,3 @@
+workspaces { prefix = "msaas-" }
+hostname     = "cy4-jfrog.cy4gate.local"
+organization = "cy4-tf-backend"
