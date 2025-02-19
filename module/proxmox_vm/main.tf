@@ -68,16 +68,22 @@ resource "proxmox_virtual_environment_vm" "proxmox_vm" {
   network_device {
     model   = "virtio"
     bridge  = var.vm_network_bridge
-    vlan_id = var.vm_network_vlan_id
+   
   }
 
-  dynamic "network_device" {
-    for_each = var.vm_network_internal_bridge == "vmbr0" ? [1] : []
-    content {
+  network_device {
       model  = "virtio"
       bridge = var.vm_network_internal_bridge
-    }
+      vlan_id = var.vm_network_internal_vlan_id
   }
+
+  # dynamic "network_device" {
+  #   for_each = var.vm_network_internal_bridge == "vmbr1" ? [1] : []
+  #   content {
+  #     model  = "virtio"
+  #     bridge = var.vm_network_internal_bridge
+  #   }
+  # }
 
   ### VGA ###
   vga {
@@ -97,14 +103,11 @@ resource "proxmox_virtual_environment_vm" "proxmox_vm" {
         gateway = (var.vm_network_ipv4 == "dhcp") ? null : var.vm_network_gateway
       }
     }
-    dynamic "ip_config" {
-      for_each = var.vm_network_internal_bridge == "vmbr0" ? [1] : []
-      content {
+    ip_config{
         ipv4 {
           address = var.vm_network_internal_ipv4
           gateway = (var.vm_network_internal_ipv4 == "dhcp") ? null : var.vm_network_internal_gateway
         }
-      }
     }
     dns {
       servers = var.vm_network_dns_server
