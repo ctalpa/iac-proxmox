@@ -1,5 +1,5 @@
 proxmox_cluster_nodes = {
-  node1 = {name="prxmsaas01", ipv4="10.90.20.99", vlan_ipv4="192.168.100.99"} 
+  node1 = {name="prxmsaas01", ipv4="10.90.20.99/24", vlan_ipv4="192.168.100.99/24"} 
 }
 
 vm-hosts = {
@@ -14,8 +14,8 @@ vm-hosts = {
 
 
 vm-network = {
-  cidr        = "192.168.100.1/24"
-  gw          = "192.168.100.1"
+  cidr        = "10.90.20.1/24"
+  gw          = "10.90.20.1"
   bridge      = "vmbr0"  
   dns_servers = ["10.90.20.1"]
   dns_domain  = "dns-domain"
@@ -26,7 +26,7 @@ vm-network = {
 vnetwork = {
   name        = "vlan_test_node1"
   interface   = "ens3f0"
-  cidr = "192.168.100.1/24"
+  cidr = ""
   gw = ""     
   bridge      = "vmbr1"
   vlan_id     = 1

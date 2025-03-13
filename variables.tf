@@ -12,7 +12,12 @@ variable "hypervisor" {
 
 variable "proxmox_cluster_nodes" {
   description = "Proxmox cluster nodes"
-  type        = map(string)
+  type        = map(object({
+    name = string
+    # network-ip
+    ipv4          = string
+    vlan_ipv4     = string
+  }))
 }
 
 variable "vm-hosts" {
@@ -23,8 +28,6 @@ variable "vm-hosts" {
     vm_id        = string
     # template_id: Template ID of the Starting Cloud Image.
     template_id = number
-    # template_name: Template name of the Starting Cloud Image.
-
     # template_full_clone: True if a full clone is needed. false for a Linked clone
     template_full_clone = bool
     name                = string
@@ -38,7 +41,7 @@ variable "vm-hosts" {
     storage_pool = string
     # network-ip
     ipv4          = string
-    internal_ipv4 = optional(string)
+    vlan_ipv4 = optional(string)
     tags          = list(string)
     })
   )

@@ -14,10 +14,10 @@ module "virtual_network" {
 
   for_each     = var.proxmox_cluster_nodes
   source       = "./module/proxmox_vn"
-  proxmox_node = each.value
+  proxmox_node = each.value.name
   vn_name      = var.vnetwork.name
   vn_interface = var.vnetwork.interface
-  vn_cidr_ipv4 = var.vnetwork.cidr
+  vn_cidr_ipv4 = each.value.vlan_ipv4
   vn_vlan_id   = var.vnetwork.vlan_id
   vn_bridge    = var.vnetwork.bridge
 
