@@ -59,7 +59,7 @@ module "virtual_machine" {
   vm_network_dns_server = var.vm-network.dns_servers
   vm_network_dns_domain = var.vm-network.dns_domain
 
-  vm_network_internal_ipv4    = each.value.internal_ipv4
+  vm_network_internal_ipv4    = each.value.vlan_ipv4
   vm_network_internal_vlan_id = var.vnetwork.vlan_id
   vm_network_internal_gateway = var.vnetwork.gw
   vm_network_internal_bridge  = var.vnetwork.bridge
