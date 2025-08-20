@@ -1,3 +1,3 @@
-workspaces { prefix = "msaas-" }
-hostname     = "cy4-jfrog.cy4gate.local"
-organization = "cy4-tf-backend"
+workspaces { prefix = "test-" }
+hostname     = "company.artifactory-manager"
+organization = "company-tf-backend"
